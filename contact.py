@@ -37,8 +37,8 @@ def validate(contact):
 
     def crearContacto():
 
-    print("Ingrese el contacto\n")
-    contact = {
+     print("Ingrese el contacto\n")
+     contact = {
         "nombre": input("nombre: ").lower(),
         "telefono": input("telefono: "),
         "correo": input("correo: "),
@@ -143,3 +143,147 @@ def eliminarContacto():
             print("contacto eliminado")
         else:
             print("contacto no encontrado")
+
+def callContact():
+    letters = contacts.keys()
+    cts = []
+    count = 1
+    for letter in letters:
+        persons = contacts[letter]
+        print(letter)
+        for name, data in persons.items():
+            print(f'   {count}. {name}')
+            count += 1
+            cts.append(data)
+
+    select = input("contacto? ").lower()
+    if select.isdigit():
+        person = cts[int(select) - 1]
+        time.sleep(3)
+        print(f'Lamando a "{person["nombre"]}" al {person["telefono"]}')
+
+    else:
+        key = select[:1].upper()
+        if contacts[key][select]:
+            person = contacts[key][select]
+            time.sleep(3)
+            print(f'Lamando a "{person["nombre"]}" al {person["telefono"]}')
+        else:
+            print("contacto no encontrado\n")
+
+
+def SendMessage():
+    letters = contacts.keys()
+    cts = []
+    count = 1
+    for letter in letters:
+        persons = contacts[letter]
+        print(letter)
+        for name, data in persons.items():
+            print(f'   {count}. {name}')
+            count += 1
+            cts.append(data)
+
+    select = input("contacto? ").lower()
+    message = input("\nMensaje: ")
+    if select.isdigit():
+        person = cts[int(select) - 1]
+        print(
+            f'Hola "{person["nombre"]}" {person["telefono"]}\n\t > {message}')
+
+
+def SendMail():
+    letters = contacts.keys()
+    cts = []
+    count = 1
+    for letter in letters:
+        persons = contacts[letter]
+        print(letter)
+        for name, data in persons.items():
+            print(f'   {count}. {name}')
+            count += 1
+            cts.append(data)
+
+    select = input("contacto? ").lower()
+    subject = input("\nSubject: ")
+    message = input("Mensaje: ")
+    if select.isdigit():
+        person = cts[int(select) - 1]
+        print(
+            f'Enviando correo a "{person["nombre"]}" {person["correo"]}\n\t > Subject: {subject} \n\t > Message: {message}')
+
+    else:
+        key = select[:1].upper()
+        if contacts[key][select]:
+            person = contacts[key][select]
+            print(
+                f'Enviando correo a "{person["nombre"]}" {person["correo"]}\n\t > Subject: {subject} \n\t > Message: {message}')
+        else:
+            print("contacto no encontrado\n")
+
+
+def exportContacts():
+    with open('contacts.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["nombre", "telefono", "correo", "empresa", "extra"])
+        for letter, persons in contacts.items():
+            for person in persons:
+                writer.writerow(list(persons[person].values()))
+  
+        print("contactos exportados exitosamente")
+
+while not exit:
+    clear()
+    # Agregar contactos
+    # Buscar contactos
+    # Listar contactos
+    # Borrar contactos
+    # Llamar contactos
+    # Enviar mensaje a contactos
+    # Enviar correo a contacto.
+    # Exportar Contactos.
+    options = {
+        "1": {
+            "text": "Crear Contacto",
+            "pointer": crearContacto
+        },
+        "2": {
+            "text": "Buscar Contacto",
+            "pointer": buscarContacto
+        },
+        "3": {
+            "text": "listar Contactos",
+            "pointer": listarContactos
+        },
+        "4": {
+            "text": "Eliminar Contacto",
+            "pointer": eliminarContacto
+        },
+        "5": {
+            "text": "Lammar a contacto",
+            "pointer": callContact
+        },
+        "6": {
+            "text": "Enviar mensaje a contacto",
+            "pointer": SendMessage
+        },
+        "7": {
+            "text": "Enviar correo a contacto",
+            "pointer": SendMail
+        },
+        "8": {
+            "text": "Exportar Contactos",
+            "pointer": exportContacts
+        },
+
+
+    }
+    for n, option in options.items():
+        print(f'{n}) {option["text"]}')
+
+    select = input("Ingrese numero de opcion: ")
+    option = options.get(select)
+    clear()
+    option["pointer"]()
+    wait()
+    
