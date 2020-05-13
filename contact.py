@@ -86,3 +86,60 @@ def listarContactos():
     if len(select):
         person = cts[int(select) - 1]
         showPerson(person)
+        
+        
+def buscarContacto():
+    name = input("buscar: ")
+    values = contacts.values()
+    names = []
+    for letter in values:
+        cts = letter.keys()
+        for person in cts:
+            names.append(person)
+
+    def match(fullname):
+        return name.lower() in fullname.lower()
+
+    persons = filter(match, names)
+    if len(persons):
+        print("Resultados: ")
+        for person in persons:
+            print(f' - {person}')
+
+    else:
+        print("Ningun contacto encontrado")
+
+    print("\n")
+
+
+def eliminarContacto():
+    letters = contacts.keys()
+    cts = []
+    count = 1
+    for letter in letters:
+        persons = contacts[letter]
+        print(letter)
+        for name, data in persons.items():
+            print(f'   {count}. {name}')
+            count += 1
+            cts.append(name)
+
+    select = input("Eliminar contact contacto: ").lower()
+    if select.isdigit():
+        key = int(select) - 1
+        del cts[key]
+        try:
+            for letter, persons in contacts.items():
+                for person in persons.keys():
+                    if not person in cts:
+                        del contacts[letter][person]
+        except:
+            pass
+
+    else:
+        key = select[:1].upper()
+        if contacts[key][select]:
+            del contacts[key][select]
+            print("contacto eliminado")
+        else:
+            print("contacto no encontrado")
