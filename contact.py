@@ -2,15 +2,23 @@ import validators
 import os
 import time
 import csv
+import requests as req
+import json
 
 
 class contactBook(dict):
-    def __missing__(self, key):
+    def _missing_(self, key):
         value = self[key] = type(self)()
         return value
 
 
 contacts = contactBook()
+r = req.get('http://demo7130536.mockable.io/final-contacts-100')
+data =json.loads(r.text)
+for key, lcontact in data.items():
+  contacts[key] = lcontact
+  
+
 exit = False
 
 
@@ -35,10 +43,11 @@ def validate(contact):
 
     return fail
 
-    def crearContacto():
 
-     print("Ingrese el contacto\n")
-     contact = {
+def crearContacto():
+
+    print("Ingrese el contacto\n")
+    contact = {
         "nombre": input("nombre: ").lower(),
         "telefono": input("telefono: "),
         "correo": input("correo: "),
@@ -86,8 +95,8 @@ def listarContactos():
     if len(select):
         person = cts[int(select) - 1]
         showPerson(person)
-        
-        
+
+
 def buscarContacto():
     name = input("buscar: ")
     values = contacts.values()
@@ -143,6 +152,7 @@ def eliminarContacto():
             print("contacto eliminado")
         else:
             print("contacto no encontrado")
+
 
 def callContact():
     letters = contacts.keys()
@@ -286,4 +296,3 @@ while not exit:
     clear()
     option["pointer"]()
     wait()
-    
